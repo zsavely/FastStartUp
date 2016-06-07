@@ -7,8 +7,8 @@ import java.util.Random;
 /**
  * @author Savelii Zagurskii
  */
-public class VeryHeavyLibrary {
-  public VeryHeavyLibrary(Random random) {
+public class HeavyLibrary {
+  public HeavyLibrary(Random random) {
     SystemClock.sleep(random.nextInt(3000));
   }
 

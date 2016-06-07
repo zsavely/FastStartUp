@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import com.szagurskii.superfaststartup.R;
 import com.szagurskii.superfaststartup.SuperFastStartupApp;
-import com.szagurskii.superfaststartup.util.VeryHeavyLibrary;
+import com.szagurskii.superfaststartup.util.HeavyLibrary;
 
 import javax.inject.Inject;
 
@@ -21,10 +21,10 @@ import rx.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity {
 
   @Inject SuperFastStartupApp application;
-  @Inject Observable<VeryHeavyLibrary> veryHeavyLibraryObservable;
+  @Inject Observable<HeavyLibrary> heavy;
 
   private Subscription subscription;
-  private VeryHeavyLibrary veryHeavyLibrary;
+  private HeavyLibrary heavyLibrary;
   private TextView textView;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -35,19 +35,19 @@ public class MainActivity extends AppCompatActivity {
     SuperFastStartupApp.app(this).mainComponent().inject(this);
 
     Preconditions.checkNotNull(application);
-    Preconditions.checkNotNull(veryHeavyLibraryObservable);
+    Preconditions.checkNotNull(heavy);
 
-    subscription = veryHeavyLibraryObservable
+    subscription = heavy
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeOn(Schedulers.computation())
-        .subscribe(new Action1<VeryHeavyLibrary>() {
-          @Override public void call(VeryHeavyLibrary veryHeavyLibrary) {
-            MainActivity.this.veryHeavyLibrary = veryHeavyLibrary;
+        .subscribe(new Action1<HeavyLibrary>() {
+          @Override public void call(HeavyLibrary heavyLibrary) {
+            MainActivity.this.heavyLibrary = heavyLibrary;
 
             // Won't be null, because we unsubscribe in onPause().
-            textView.append("\n" + veryHeavyLibrary.initializedString());
+            textView.append("\n" + heavyLibrary.initializedString());
 
-            Toast.makeText(MainActivity.this, veryHeavyLibrary.initializedString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, heavyLibrary.initializedString(), Toast.LENGTH_SHORT).show();
           }
         });
   }
