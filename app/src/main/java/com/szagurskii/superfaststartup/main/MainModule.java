@@ -16,10 +16,6 @@ import rx.Observable;
  */
 @Module
 public class MainModule {
-  @Provides @NonNull @MainScope public Random random() {
-    return new Random();
-  }
-
   @Provides @NonNull @MainScope public Observable<HeavyLibrary> veryHeavyLibrary(final Random random) {
     return Observable.fromCallable(new Callable<HeavyLibrary>() {
       @Override public HeavyLibrary call() throws Exception {

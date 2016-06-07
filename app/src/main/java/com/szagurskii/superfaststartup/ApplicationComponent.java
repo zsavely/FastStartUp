@@ -1,5 +1,7 @@
 package com.szagurskii.superfaststartup;
 
+import java.util.Random;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -10,4 +12,6 @@ import dagger.Component;
 })
 public interface ApplicationComponent {
   SuperFastStartupApp app();
+
+  Random random();
 }

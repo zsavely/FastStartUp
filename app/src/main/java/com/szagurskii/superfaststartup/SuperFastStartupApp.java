@@ -8,6 +8,7 @@ import com.szagurskii.superfaststartup.main.MainComponent;
 import com.szagurskii.superfaststartup.main.MainModule;
 import com.szagurskii.superfaststartup.splash.DaggerSplashComponent;
 import com.szagurskii.superfaststartup.splash.SplashComponent;
+import com.szagurskii.superfaststartup.splash.SplashModule;
 
 /**
  * @author Savelii Zagurskii
@@ -42,6 +43,8 @@ public class SuperFastStartupApp extends Application {
   public SplashComponent splashComponent() {
     if (splashComponent == null) {
       splashComponent = DaggerSplashComponent.builder()
+          .applicationComponent(applicationComponent)
+          .splashModule(new SplashModule())
           .build();
     }
     return splashComponent;
@@ -49,6 +52,10 @@ public class SuperFastStartupApp extends Application {
 
   public void releaseMainComponent() {
     mainComponent = null;
+  }
+
+  public void releaseSplashComponent() {
+    splashComponent = null;
   }
 
   public static SuperFastStartupApp app(Context context) {

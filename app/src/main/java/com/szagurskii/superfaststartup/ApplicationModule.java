@@ -2,6 +2,8 @@ package com.szagurskii.superfaststartup;
 
 import android.support.annotation.NonNull;
 
+import java.util.Random;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -16,8 +18,11 @@ public class ApplicationModule {
     this.application = application;
   }
 
-  @Provides @NonNull @Singleton
-  public SuperFastStartupApp provideApp() {
+  @Provides @NonNull @Singleton public SuperFastStartupApp provideApp() {
     return application;
+  }
+
+  @Provides @NonNull @Singleton public Random random() {
+    return new Random();
   }
 }
