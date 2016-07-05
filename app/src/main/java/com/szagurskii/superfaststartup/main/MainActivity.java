@@ -5,9 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.szagurskii.superfaststartup.FastStartupApp;
 import com.szagurskii.superfaststartup.R;
-import com.szagurskii.superfaststartup.SuperFastStartupApp;
-import com.szagurskii.superfaststartup.util.HeavyLibrary;
 
 import javax.inject.Inject;
 
@@ -18,43 +17,59 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity {
+public final class MainActivity extends AppCompatActivity {
+  public static final String EXTRA_USEFUL_STRING_KEY = "extra_useful_string_key";
 
-  @Inject SuperFastStartupApp application;
-  @Inject Observable<HeavyLibrary> heavy;
+  /**
+   * Observable which will emit an item when fully initialized.
+   * {@link rx.Single} can also be used.
+   */
+  @Inject Observable<MainLibrary> mainLibraryObservable;
 
+  /** Subscription to unsubscribe in onStop(). */
   private Subscription subscription;
-  private HeavyLibrary heavyLibrary;
+
+  /** Library which will be initialized in the background. */
+  private MainLibrary mainLibrary;
+
+  /** Simple TextView. */
   private TextView textView;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    // Initialize views.
     setContentView(R.layout.activity_main);
     textView = (TextView) findViewById(R.id.textview);
 
-    SuperFastStartupApp.app(this).mainComponent().inject(this);
+    // Inject {@code mainLibraryObservable}.
+    FastStartupApp.app(this).mainComponent().inject(this);
 
-    Preconditions.checkNotNull(application);
-    Preconditions.checkNotNull(heavy);
+    // Check that we successfully injected the {@code mainLibraryObservable}.
+    Preconditions.checkNotNull(mainLibraryObservable);
 
-    subscription = heavy
-        .observeOn(AndroidSchedulers.mainThread())
+    // Create subscription.
+    subscription = mainLibraryObservable
+        // Init library on another thread.
         .subscribeOn(Schedulers.computation())
-        .subscribe(new Action1<HeavyLibrary>() {
-          @Override public void call(HeavyLibrary heavyLibrary) {
-            MainActivity.this.heavyLibrary = heavyLibrary;
+        // Get the library on main thread.
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<MainLibrary>() {
+          @Override public void call(MainLibrary mainLibrary) {
+            MainActivity.this.mainLibrary = mainLibrary;
 
-            // Won't be null, because we unsubscribe in onPause().
-            textView.append("\n" + heavyLibrary.initializedString());
+            // Won't be null, because we unsubscribe in onStop().
+            textView.append("\n" + mainLibrary.initializedString());
 
-            Toast.makeText(MainActivity.this, heavyLibrary.initializedString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, mainLibrary.initializedString(), Toast.LENGTH_SHORT).show();
           }
         });
   }
 
-  @Override protected void onPause() {
-    super.onPause();
+  @Override protected void onStop() {
+    super.onStop();
 
+    // Unsubscribe, so we don't open another activity after exiting.
     if (subscription != null && !subscription.isUnsubscribed()) {
       subscription.unsubscribe();
     }
@@ -63,7 +78,10 @@ public class MainActivity extends AppCompatActivity {
   @Override protected void onDestroy() {
     super.onDestroy();
 
-    application.releaseMainComponent();
+    // Optional: release the resources which were acquired in {@link MainModule}.
+    FastStartupApp.app(this).releaseMainComponent();
+
+    // Release View references.
     textView = null;
   }
 }

@@ -2,8 +2,6 @@ package com.szagurskii.superfaststartup.splash;
 
 import android.support.annotation.NonNull;
 
-import com.szagurskii.superfaststartup.util.Heavy2Library;
-
 import java.util.Random;
 import java.util.concurrent.Callable;
 
@@ -16,10 +14,10 @@ import rx.Observable;
  */
 @Module
 public class SplashModule {
-  @Provides @NonNull @SplashScope public Observable<Heavy2Library> veryHeavyLibrary(final Random random) {
-    return Observable.fromCallable(new Callable<Heavy2Library>() {
-      @Override public Heavy2Library call() throws Exception {
-        return new Heavy2Library(random);
+  @Provides @NonNull @SplashScope public Observable<SplashLibrary> veryHeavyLibrary(final Random random) {
+    return Observable.fromCallable(new Callable<SplashLibrary>() {
+      @Override public SplashLibrary call() throws Exception {
+        return new SplashLibrary(random);
       }
     });
   }

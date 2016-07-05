@@ -1,3 +1,4 @@
 <resources>
-  <string name="app_name">SuperFastStartUp</string>
+  <string name="app_name">FastStartUp</string>
+  <string name="error_fatal">Couldn\'t start the application!</string>
 </resources>

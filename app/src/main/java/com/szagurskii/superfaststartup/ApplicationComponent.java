@@ -11,7 +11,10 @@ import dagger.Component;
     ApplicationModule.class,
 })
 public interface ApplicationComponent {
-  SuperFastStartupApp app();
-
+  /**
+   * {@link Random} instance from {@link ApplicationModule}
+   * which now can be injected to children
+   * that depend on {@link ApplicationComponent}.
+   */
   Random random();
 }

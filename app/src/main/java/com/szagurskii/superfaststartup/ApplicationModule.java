@@ -11,14 +11,13 @@ import dagger.Provides;
 
 @Module
 public class ApplicationModule {
-  @NonNull
-  private final SuperFastStartupApp application;
+  @NonNull private final FastStartupApp application;
 
-  public ApplicationModule(@NonNull SuperFastStartupApp application) {
+  public ApplicationModule(@NonNull FastStartupApp application) {
     this.application = application;
   }
 
-  @Provides @NonNull @Singleton public SuperFastStartupApp provideApp() {
+  @Provides @NonNull @Singleton public FastStartupApp provideApp() {
     return application;
   }
 

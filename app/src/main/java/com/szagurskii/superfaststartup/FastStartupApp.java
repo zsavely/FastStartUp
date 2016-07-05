@@ -2,6 +2,8 @@ package com.szagurskii.superfaststartup;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.StrictMode;
+import android.support.annotation.NonNull;
 
 import com.szagurskii.superfaststartup.main.DaggerMainComponent;
 import com.szagurskii.superfaststartup.main.MainComponent;
@@ -13,13 +15,14 @@ import com.szagurskii.superfaststartup.splash.SplashModule;
 /**
  * @author Savelii Zagurskii
  */
-public class SuperFastStartupApp extends Application {
+public class FastStartupApp extends Application {
   private ApplicationComponent applicationComponent;
   private MainComponent mainComponent;
   private SplashComponent splashComponent;
 
   @Override public void onCreate() {
     super.onCreate();
+    StrictMode.enableDefaults();
 
     applicationComponent = DaggerApplicationComponent.builder()
         .applicationModule(new ApplicationModule(this))
@@ -30,20 +33,20 @@ public class SuperFastStartupApp extends Application {
     return applicationComponent;
   }
 
-  public MainComponent mainComponent() {
+  @NonNull public MainComponent mainComponent() {
     if (mainComponent == null) {
       mainComponent = DaggerMainComponent.builder()
-          .applicationComponent(applicationComponent)
+          .applicationComponent(appComponent())
           .mainModule(new MainModule())
           .build();
     }
     return mainComponent;
   }
 
-  public SplashComponent splashComponent() {
+  @NonNull public SplashComponent splashComponent() {
     if (splashComponent == null) {
       splashComponent = DaggerSplashComponent.builder()
-          .applicationComponent(applicationComponent)
+          .applicationComponent(appComponent())
           .splashModule(new SplashModule())
           .build();
     }
@@ -58,7 +61,7 @@ public class SuperFastStartupApp extends Application {
     splashComponent = null;
   }
 
-  public static SuperFastStartupApp app(Context context) {
-    return (SuperFastStartupApp) context.getApplicationContext();
+  @NonNull public static FastStartupApp app(@NonNull Context context) {
+    return (FastStartupApp) context.getApplicationContext();
   }
 }
