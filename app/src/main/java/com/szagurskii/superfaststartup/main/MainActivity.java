@@ -69,7 +69,7 @@ public final class MainActivity extends AppCompatActivity {
   @Override protected void onStop() {
     super.onStop();
 
-    // Unsubscribe, so we don't open another activity after exiting.
+    // Unsubscribe to release resources.
     if (subscription != null && !subscription.isUnsubscribed()) {
       subscription.unsubscribe();
     }

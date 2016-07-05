@@ -62,7 +62,7 @@ public final class SplashActivity extends AppCompatActivity implements OnInitCal
     onInitObserver = new OnInitObserver(this);
 
     if (initialized.get()) {
-      openAndFinish(this, splashLibraryLazy.get());
+      openMainAndFinish(this, splashLibraryLazy.get());
     } else {
       // Create subscription.
       subscription = splashLibraryObservable
@@ -82,11 +82,15 @@ public final class SplashActivity extends AppCompatActivity implements OnInitCal
     }
     // In current example SplashLibrary initializes 5 seconds and our Observer references the SplashActivity.
     // We must release the Activity reference in order to avoid memory leaking.
-    onInitObserver.releaseActivity();
+    onInitObserver.releaseListener();
   }
 
   @Override protected void onDestroy() {
     super.onDestroy();
+
+    // Clear all references.
+    onInitObserver = null;
+    subscription = null;
 
     // Optional: release the resources which were acquired in {@link SplashModule}.
     // Note: if we want to survive rotation, we should not release the component.
@@ -99,7 +103,7 @@ public final class SplashActivity extends AppCompatActivity implements OnInitCal
     initialized.set(true);
 
     // Open new activity and finish current.
-    openAndFinish(this, splashLibrary);
+    openMainAndFinish(this, splashLibrary);
   }
 
   @Override public void onFailure(Throwable e) {
@@ -108,7 +112,7 @@ public final class SplashActivity extends AppCompatActivity implements OnInitCal
   }
 
   /** Show toast, start new activity and finish current activity. */
-  private static void openAndFinish(@NonNull Activity activity, @NonNull SplashLibrary splashLibrary) {
+  private static void openMainAndFinish(@NonNull Activity activity, @NonNull SplashLibrary splashLibrary) {
     final String initialized = splashLibrary.initializedString();
     Toast.makeText(activity, initialized, Toast.LENGTH_SHORT).show();
 
@@ -140,7 +144,7 @@ public final class SplashActivity extends AppCompatActivity implements OnInitCal
       onInitCallbacks.onSuccess(splashLibrary);
     }
 
-    private void releaseActivity() {
+    private void releaseListener() {
       onInitCallbacks = null;
     }
   }
