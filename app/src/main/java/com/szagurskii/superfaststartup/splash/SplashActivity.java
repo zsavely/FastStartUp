@@ -55,6 +55,7 @@ public final class SplashActivity extends AppCompatActivity {
           @Override public void onError(Throwable e) {
             Log.d(TAG, "Library initialization failed.", e);
             Toast.makeText(SplashActivity.this, R.string.error_fatal, Toast.LENGTH_SHORT).show();
+            finish();
           }
           //@formatter:on
           @Override public void onNext(SplashLibrary splashLibrary) {
