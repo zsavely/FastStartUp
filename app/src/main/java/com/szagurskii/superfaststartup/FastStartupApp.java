@@ -6,6 +6,7 @@ import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.squareup.leakcanary.LeakCanary;
 import com.szagurskii.superfaststartup.main.DaggerMainComponent;
 import com.szagurskii.superfaststartup.main.MainComponent;
 import com.szagurskii.superfaststartup.main.MainModule;
@@ -24,6 +25,7 @@ public final class FastStartupApp extends Application {
 
   @Override public void onCreate() {
     super.onCreate();
+    LeakCanary.install(this);
     StrictMode.enableDefaults();
 
     applicationComponent = DaggerApplicationComponent.builder()

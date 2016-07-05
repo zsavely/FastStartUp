@@ -1,12 +1,18 @@
 package com.szagurskii.superfaststartup.splash;
 
 import android.os.SystemClock;
-
-import java.util.Random;
+import android.util.Log;
 
 public class SplashLibrary {
-  public SplashLibrary(Random random) {
-    SystemClock.sleep(random.nextInt(3000));
+  private static final String TAG = SplashLibrary.class.getSimpleName();
+
+  public SplashLibrary() {
+
+    // Simulate hard initialization process.
+    for (int i = 0; i < 5; i++) {
+      Log.d(TAG, String.format("i = %1$s", i));
+      SystemClock.sleep(1000);
+    }
   }
 
   public String usefulString() {

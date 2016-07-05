@@ -59,7 +59,7 @@ public final class MainActivity extends AppCompatActivity {
             MainActivity.this.mainLibrary = mainLibrary;
 
             // Won't be null, because we unsubscribe in onStop().
-            textView.append("\n" + mainLibrary.initializedString());
+            textView.append(mainLibrary.initializedString() + "\n");
 
             Toast.makeText(MainActivity.this, mainLibrary.initializedString(), Toast.LENGTH_SHORT).show();
           }

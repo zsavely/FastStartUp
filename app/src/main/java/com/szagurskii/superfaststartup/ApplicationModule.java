@@ -11,6 +11,7 @@ import dagger.Provides;
 
 @Module
 public class ApplicationModule {
+
   @NonNull private final FastStartupApp application;
 
   public ApplicationModule(@NonNull FastStartupApp application) {
