@@ -14,7 +14,7 @@ import rx.Observable;
  */
 @Module
 public class SplashModule {
-  @Provides @NonNull @SplashScope public Observable<SplashLibrary> veryHeavyLibrary(final Random random) {
+  @Provides @NonNull @SplashScope public Observable<SplashLibrary> splashLibrary(final Random random) {
     return Observable.fromCallable(new Callable<SplashLibrary>() {
       @Override public SplashLibrary call() throws Exception {
         return new SplashLibrary(random);

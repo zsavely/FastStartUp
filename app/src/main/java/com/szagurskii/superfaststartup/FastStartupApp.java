@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.szagurskii.superfaststartup.main.DaggerMainComponent;
 import com.szagurskii.superfaststartup.main.MainComponent;
@@ -16,7 +17,11 @@ import com.szagurskii.superfaststartup.splash.SplashModule;
  * @author Savelii Zagurskii
  */
 public class FastStartupApp extends Application {
+
+  /** Common application component. */
   private ApplicationComponent applicationComponent;
+
+  /** Activity-related components. */
   private MainComponent mainComponent;
   private SplashComponent splashComponent;
 
@@ -29,7 +34,7 @@ public class FastStartupApp extends Application {
         .build();
   }
 
-  public ApplicationComponent appComponent() {
+  @Nullable public ApplicationComponent appComponent() {
     return applicationComponent;
   }
 
