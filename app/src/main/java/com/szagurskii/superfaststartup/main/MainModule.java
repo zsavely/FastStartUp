@@ -9,9 +9,6 @@ import dagger.Module;
 import dagger.Provides;
 import rx.Observable;
 
-/**
- * @author Savelii Zagurskii
- */
 @Module
 public class MainModule {
   @Provides @NonNull @MainScope public Observable<MainLibrary> mainLibrary(final Random random) {

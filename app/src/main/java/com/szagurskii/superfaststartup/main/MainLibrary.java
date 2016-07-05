@@ -4,9 +4,6 @@ import android.os.SystemClock;
 
 import java.util.Random;
 
-/**
- * @author Savelii Zagurskii
- */
 public class MainLibrary {
   public MainLibrary(Random random) {
     SystemClock.sleep(random.nextInt(3000));

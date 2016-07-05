@@ -9,9 +9,6 @@ import dagger.Module;
 import dagger.Provides;
 import rx.Observable;
 
-/**
- * @author Savelii Zagurskii
- */
 @Module
 public class SplashModule {
   @Provides @NonNull @SplashScope public Observable<SplashLibrary> splashLibrary(final Random random) {

@@ -4,9 +4,6 @@ import android.os.SystemClock;
 
 import java.util.Random;
 
-/**
- * @author Savelii Zagurskii
- */
 public class SplashLibrary {
   public SplashLibrary(Random random) {
     SystemClock.sleep(random.nextInt(3000));

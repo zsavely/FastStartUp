@@ -4,9 +4,6 @@ import com.szagurskii.superfaststartup.ApplicationComponent;
 
 import dagger.Component;
 
-/**
- * @author Savelii Zagurskii
- */
 @Component(
     dependencies = {
         ApplicationComponent.class

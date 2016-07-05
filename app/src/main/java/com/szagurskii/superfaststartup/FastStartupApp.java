@@ -13,9 +13,6 @@ import com.szagurskii.superfaststartup.splash.DaggerSplashComponent;
 import com.szagurskii.superfaststartup.splash.SplashComponent;
 import com.szagurskii.superfaststartup.splash.SplashModule;
 
-/**
- * @author Savelii Zagurskii
- */
 public final class FastStartupApp extends Application {
 
   /** Common application component. */
