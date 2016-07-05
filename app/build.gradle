@@ -2,9 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
+  signingConfigs {
+    config {
+      keyAlias 'FastStartUp'
+      keyPassword 'FastStartUp'
+      storeFile file('FastStartUp.jks')
+      storePassword 'FastStartUp'
+    }
+  }
   compileSdkVersion 23
   buildToolsVersion "23.0.3"
-
   defaultConfig {
     applicationId "com.szagurskii.superfaststartup"
     minSdkVersion 14
@@ -17,6 +24,7 @@ android {
       minifyEnabled true
       shrinkResources true
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      signingConfig signingConfigs.config
     }
   }
 }
