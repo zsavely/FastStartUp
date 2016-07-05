@@ -26,7 +26,6 @@ public class SplashActivity extends Activity {
   @Inject Observable<Heavy2Library> heavy;
 
   private Subscription subscription;
-  private Heavy2Library heavy2Library;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -40,8 +39,6 @@ public class SplashActivity extends Activity {
         .subscribeOn(Schedulers.computation())
         .subscribe(new Action1<Heavy2Library>() {
           @Override public void call(Heavy2Library heavy2Library) {
-            SplashActivity.this.heavy2Library = heavy2Library;
-
             Log.d(TAG, heavy2Library.initializedString());
 
             Toast.makeText(SplashActivity.this, heavy2Library.initializedString(), Toast.LENGTH_SHORT).show();
@@ -53,8 +50,8 @@ public class SplashActivity extends Activity {
         });
   }
 
-  @Override protected void onPause() {
-    super.onPause();
+  @Override protected void onStop() {
+    super.onStop();
 
     if (subscription != null && !subscription.isUnsubscribed()) {
       subscription.unsubscribe();
