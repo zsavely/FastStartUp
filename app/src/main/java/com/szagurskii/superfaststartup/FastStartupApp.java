@@ -16,7 +16,7 @@ import com.szagurskii.superfaststartup.splash.SplashModule;
 /**
  * @author Savelii Zagurskii
  */
-public class FastStartupApp extends Application {
+public final class FastStartupApp extends Application {
 
   /** Common application component. */
   private ApplicationComponent applicationComponent;
