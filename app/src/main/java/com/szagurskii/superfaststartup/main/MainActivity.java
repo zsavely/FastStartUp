@@ -18,7 +18,7 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public final class MainActivity extends AppCompatActivity {
-  public static final String EXTRA_USEFUL_STRING_KEY = "extra_useful_string_key";
+  public static final String EXTRA_USEFUL_STRING = "extra_useful_string";
 
   /**
    * Observable which will emit an item when fully initialized.

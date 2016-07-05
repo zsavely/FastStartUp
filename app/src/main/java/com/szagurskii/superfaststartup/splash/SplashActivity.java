@@ -1,5 +1,6 @@
 package com.szagurskii.superfaststartup.splash;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,7 +26,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public final class SplashActivity extends AppCompatActivity {
+public final class SplashActivity extends AppCompatActivity implements OnInitCallbacks {
   private static final String TAG = SplashActivity.class.getSimpleName();
 
   /** Lazy instance which will be used when the {@link SplashLibrary} is initialized. */
@@ -61,7 +62,7 @@ public final class SplashActivity extends AppCompatActivity {
     onInitObserver = new OnInitObserver(this);
 
     if (initialized.get()) {
-      usefulMethod(this, splashLibraryLazy.get());
+      openAndFinish(this, splashLibraryLazy.get());
     } else {
       // Create subscription.
       subscription = splashLibraryObservable
@@ -93,25 +94,38 @@ public final class SplashActivity extends AppCompatActivity {
     // FastStartupApp.app(this).releaseSplashComponent();
   }
 
+  @Override public void onSuccess(SplashLibrary splashLibrary) {
+    // The initialization went successful, we can set the global variable to true.
+    initialized.set(true);
+
+    // Open new activity and finish current.
+    openAndFinish(this, splashLibrary);
+  }
+
+  @Override public void onFailure(Throwable e) {
+    Toast.makeText(this, R.string.error_fatal, Toast.LENGTH_SHORT).show();
+    finish();
+  }
+
   /** Show toast, start new activity and finish current activity. */
-  private static void usefulMethod(@NonNull SplashActivity splashActivity, @NonNull SplashLibrary splashLibrary) {
+  private static void openAndFinish(@NonNull Activity activity, @NonNull SplashLibrary splashLibrary) {
     final String initialized = splashLibrary.initializedString();
-    Toast.makeText(splashActivity, initialized, Toast.LENGTH_SHORT).show();
+    Toast.makeText(activity, initialized, Toast.LENGTH_SHORT).show();
 
-    Intent intent = new Intent(splashActivity, MainActivity.class);
-    intent.putExtra(MainActivity.EXTRA_USEFUL_STRING_KEY, splashLibrary.usefulString());
-    splashActivity.startActivity(intent);
+    Intent intent = new Intent(activity, MainActivity.class);
+    intent.putExtra(MainActivity.EXTRA_USEFUL_STRING, splashLibrary.usefulString());
+    activity.startActivity(intent);
 
-    splashActivity.finish();
+    activity.finish();
   }
 
   // Yes, activity can become null but at that point in time we will have already unsubscribed from this Observer.
   @SuppressWarnings("ConstantConditions")
-  private static class OnInitObserver implements Observer<SplashLibrary> {
-    @Nullable private SplashActivity splashActivity;
+  private static final class OnInitObserver implements Observer<SplashLibrary> {
+    @Nullable private OnInitCallbacks onInitCallbacks;
 
-    public OnInitObserver(@NonNull SplashActivity splashActivity) {
-      this.splashActivity = splashActivity;
+    OnInitObserver(@NonNull OnInitCallbacks onInitCallbacks) {
+      this.onInitCallbacks = onInitCallbacks;
     }
 
     @Override public void onCompleted() {
@@ -119,17 +133,15 @@ public final class SplashActivity extends AppCompatActivity {
 
     @Override public void onError(Throwable e) {
       Log.d(TAG, "Library initialization failed.", e);
-      Toast.makeText(splashActivity, R.string.error_fatal, Toast.LENGTH_SHORT).show();
-      splashActivity.finish();
+      onInitCallbacks.onFailure(e);
     }
 
     @Override public void onNext(SplashLibrary splashLibrary) {
-      splashActivity.initialized.set(true);
-      usefulMethod(splashActivity, splashLibrary);
+      onInitCallbacks.onSuccess(splashLibrary);
     }
 
     private void releaseActivity() {
-      splashActivity = null;
+      onInitCallbacks = null;
     }
   }
 }
