@@ -89,6 +89,7 @@ public final class SplashActivity extends AppCompatActivity {
 
     // Optional: release the resources which were acquired in {@link SplashModule}.
     // Note: if we want to survive rotation, we should not release the component.
+    // Note: if we want fast subsequent app start-up, we should not release the component.
     // FastStartupApp.app(this).releaseSplashComponent();
   }
 
