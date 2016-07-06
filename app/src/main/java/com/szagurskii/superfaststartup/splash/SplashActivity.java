@@ -60,6 +60,10 @@ public final class SplashActivity extends AppCompatActivity implements OnInitCal
     Preconditions.checkNotNull(initialized);
 
     onInitObserver = new OnInitObserver(this);
+  }
+
+  @Override protected void onStart() {
+    super.onStart();
 
     if (initialized.get()) {
       openMainAndFinish(this, splashLibraryLazy.get());
@@ -80,13 +84,14 @@ public final class SplashActivity extends AppCompatActivity implements OnInitCal
     if (subscription != null && !subscription.isUnsubscribed()) {
       subscription.unsubscribe();
     }
-    // In current example SplashLibrary initializes 5 seconds and our Observer references the SplashActivity.
-    // We must release the Activity reference in order to avoid memory leaking.
-    onInitObserver.releaseListener();
   }
 
   @Override protected void onDestroy() {
     super.onDestroy();
+
+    // In current example SplashLibrary initializes 5 seconds and our Observer references the SplashActivity.
+    // We must release the Activity reference in order to avoid memory leaking.
+    onInitObserver.releaseListener();
 
     // Clear all references.
     onInitObserver = null;
