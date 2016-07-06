@@ -16,15 +16,18 @@ import rx.Observable;
 public class SplashModule {
   public static final String SPLASH_ACTIVITY = "SplashActivity";
 
-  @Provides @NonNull @SplashScope @Named(SPLASH_ACTIVITY) public AtomicBoolean initialized() {
+  @Provides @NonNull @SplashScope @Named(SPLASH_ACTIVITY)
+  public AtomicBoolean initialized() {
     return new AtomicBoolean(false);
   }
 
-  @Provides @NonNull @SplashScope public SplashLibrary splashLibrary() {
+  @Provides @NonNull @SplashScope
+  public SplashLibrary splashLibrary() {
     return new SplashLibrary();
   }
 
-  @Provides @NonNull @SplashScope public Observable<SplashLibrary> splashLibraryObservable(final Lazy<SplashLibrary> splashLibraryLazy) {
+  @Provides @NonNull @SplashScope
+  public Observable<SplashLibrary> splashLibraryObservable(final Lazy<SplashLibrary> splashLibraryLazy) {
     return Observable.fromCallable(new Callable<SplashLibrary>() {
       @Override public SplashLibrary call() throws Exception {
         return splashLibraryLazy.get();

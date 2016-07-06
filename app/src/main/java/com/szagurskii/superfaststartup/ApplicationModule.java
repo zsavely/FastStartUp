@@ -18,11 +18,13 @@ public class ApplicationModule {
     this.application = application;
   }
 
-  @Provides @NonNull @Singleton public FastStartupApp provideApp() {
+  @Provides @NonNull @Singleton
+  public FastStartupApp provideApp() {
     return application;
   }
 
-  @Provides @NonNull @Singleton public Random random() {
+  @Provides @NonNull @Singleton
+  public Random random() {
     return new Random();
   }
 }
