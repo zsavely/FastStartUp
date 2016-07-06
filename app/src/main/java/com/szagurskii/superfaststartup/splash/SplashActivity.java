@@ -128,7 +128,7 @@ public final class SplashActivity extends AppCompatActivity implements OnInitCal
     activity.finish();
   }
 
-  // Yes, activity can become null but at that point in time we will have already unsubscribed from this Observer.
+  // Yes, onInitCallbacks can become null but at that point in time we will have already unsubscribed from this Observer.
   @SuppressWarnings("ConstantConditions")
   private static final class OnInitObserver implements Observer<SplashLibrary> {
     @Nullable private OnInitCallbacks onInitCallbacks;
