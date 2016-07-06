@@ -1,7 +1,7 @@
 FastStartUp
 ========
 
-This repository shows a case when a developer needs to initialize a heave library while showing a splash screen.
+This repository shows a case when a developer needs to initialize a heavy library while showing a splash screen.
 
 ### License
 
