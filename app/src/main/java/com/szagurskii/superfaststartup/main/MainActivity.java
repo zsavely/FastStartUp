@@ -3,7 +3,6 @@ package com.szagurskii.superfaststartup.main;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.szagurskii.superfaststartup.FastStartupApp;
 import com.szagurskii.superfaststartup.R;
@@ -60,8 +59,6 @@ public final class MainActivity extends AppCompatActivity {
 
             // Won't be null, because we unsubscribe in onStop().
             textView.append(mainLibrary.initializedString() + "\n");
-
-            Toast.makeText(MainActivity.this, mainLibrary.initializedString(), Toast.LENGTH_SHORT).show();
           }
         });
   }

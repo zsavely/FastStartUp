@@ -1,4 +1,5 @@
 <resources>
   <string name="app_name">FastStartUp</string>
   <string name="error_fatal">Couldn\'t start the application!</string>
+  <string name="initializing_splash_library">Initializing splash library&#8230;</string>
 </resources>
