@@ -3,6 +3,8 @@ FastStartUp
 
 This repository shows a case when a developer needs to initialize a heavy library while showing a splash screen.
 
+[Blog post "How to Load Heavy Libraries on Splash Screen [the proper way]"](http://szagurskii.com/blog/how-to-load-heavy-libraries-on-splash-screen/).
+
 ### License
 
     The MIT License (MIT)
