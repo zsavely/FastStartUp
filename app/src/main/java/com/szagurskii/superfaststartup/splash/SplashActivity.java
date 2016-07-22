@@ -26,17 +26,20 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static com.szagurskii.superfaststartup.splash.SplashModule.OBSERVABLE_SPLASH_LIBRARY;
+import static com.szagurskii.superfaststartup.splash.SplashModule.SPLASH_ACTIVITY;
+
 public final class SplashActivity extends AppCompatActivity implements OnInitCallbacks {
   private static final String TAG = SplashActivity.class.getSimpleName();
 
   /** Lazy instance which will be used when the {@link SplashLibrary} is initialized. */
   @Inject Lazy<SplashLibrary> splashLibraryLazy;
 
-  /** Observable which will emit an item when fully initialized.* {@link rx.Single} can also be used. */
-  @Inject Observable<SplashLibrary> splashLibraryObservable;
+  /** Observable which will emit an item when fully initialized. {@link rx.Single} can also be used. */
+  @Inject @Named(OBSERVABLE_SPLASH_LIBRARY) Observable<SplashLibrary> splashLibraryObservable;
 
   /** Is {@link SplashLibrary} initialized? */
-  @Inject @Named(SplashModule.SPLASH_ACTIVITY) AtomicBoolean initialized;
+  @Inject @Named(SPLASH_ACTIVITY) AtomicBoolean initialized;
 
   /** Subscription to unsubscribe in onStop(). */
   private Subscription subscription;
