@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -13,6 +12,7 @@ import com.szagurskii.superfaststartup.FastStartupApp;
 import com.szagurskii.superfaststartup.R;
 import com.szagurskii.superfaststartup.main.MainActivity;
 
+import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
@@ -134,10 +134,10 @@ public final class SplashActivity extends AppCompatActivity implements OnInitCal
   // Yes, onInitCallbacks can become null but at that point in time we will have already unsubscribed from this Observer.
   @SuppressWarnings("ConstantConditions")
   private static final class OnInitObserver implements Observer<SplashLibrary> {
-    @Nullable private OnInitCallbacks onInitCallbacks;
+    @NonNull private WeakReference<OnInitCallbacks> onInitCallbacks;
 
     OnInitObserver(@NonNull OnInitCallbacks onInitCallbacks) {
-      this.onInitCallbacks = onInitCallbacks;
+      this.onInitCallbacks = new WeakReference<>(onInitCallbacks);
     }
 
     @Override public void onCompleted() {
@@ -145,15 +145,15 @@ public final class SplashActivity extends AppCompatActivity implements OnInitCal
 
     @Override public void onError(Throwable e) {
       Log.d(TAG, "Library initialization failed.", e);
-      onInitCallbacks.onFailure(e);
+      onInitCallbacks.get().onFailure(e);
     }
 
     @Override public void onNext(SplashLibrary splashLibrary) {
-      onInitCallbacks.onSuccess(splashLibrary);
+      onInitCallbacks.get().onSuccess(splashLibrary);
     }
 
     private void releaseListener() {
-      onInitCallbacks = null;
+      onInitCallbacks.clear();
     }
   }
 }
