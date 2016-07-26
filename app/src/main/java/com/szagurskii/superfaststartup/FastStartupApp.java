@@ -6,6 +6,7 @@ import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.facebook.stetho.Stetho;
 import com.squareup.leakcanary.LeakCanary;
 import com.szagurskii.superfaststartup.main.DaggerMainComponent;
 import com.szagurskii.superfaststartup.main.MainComponent;
@@ -27,6 +28,10 @@ public final class FastStartupApp extends Application {
     super.onCreate();
     LeakCanary.install(this);
     StrictMode.enableDefaults();
+
+    Stetho.initialize(Stetho.newInitializerBuilder(this)
+        .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+        .build());
 
     applicationComponent = DaggerApplicationComponent.builder()
         .applicationModule(new ApplicationModule(this))
