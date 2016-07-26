@@ -1,6 +1,5 @@
 package com.szagurskii.superfaststartup.splash;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,12 +12,10 @@ import com.szagurskii.superfaststartup.R;
 import com.szagurskii.superfaststartup.main.MainActivity;
 
 import java.lang.ref.WeakReference;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import dagger.Lazy;
 import dagger.internal.Preconditions;
 import rx.Observable;
 import rx.Observer;
@@ -27,19 +24,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import static com.szagurskii.superfaststartup.splash.SplashModule.OBSERVABLE_SPLASH_LIBRARY;
-import static com.szagurskii.superfaststartup.splash.SplashModule.SPLASH_ACTIVITY;
 
 public final class SplashActivity extends AppCompatActivity implements OnInitCallbacks {
   private static final String TAG = SplashActivity.class.getSimpleName();
 
-  /** Lazy instance which will be used when the {@link SplashLibrary} is initialized. */
-  @Inject Lazy<SplashLibrary> splashLibraryLazy;
-
   /** Observable which will emit an item when fully initialized. {@link rx.Single} can also be used. */
   @Inject @Named(OBSERVABLE_SPLASH_LIBRARY) Observable<SplashLibrary> splashLibraryObservable;
-
-  /** Is {@link SplashLibrary} initialized? */
-  @Inject @Named(SPLASH_ACTIVITY) AtomicBoolean initialized;
 
   /** Subscription to unsubscribe in onStop(). */
   private Subscription subscription;
@@ -58,9 +48,7 @@ public final class SplashActivity extends AppCompatActivity implements OnInitCal
     FastStartupApp.app(this).splashComponent().inject(this);
 
     // Check that the injection is successful.
-    Preconditions.checkNotNull(splashLibraryLazy);
     Preconditions.checkNotNull(splashLibraryObservable);
-    Preconditions.checkNotNull(initialized);
 
     onInitObserver = new OnInitObserver(this);
   }
@@ -68,16 +56,12 @@ public final class SplashActivity extends AppCompatActivity implements OnInitCal
   @Override protected void onStart() {
     super.onStart();
 
-    if (initialized.get()) {
-      openMainAndFinish(this, splashLibraryLazy.get());
-    } else {
-      // Create subscription.
-      subscription = splashLibraryObservable
-          // Init library on another thread.
-          .subscribeOn(Schedulers.computation())
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(onInitObserver);
-    }
+    // Create subscription.
+    subscription = splashLibraryObservable
+        // Init library on another thread.
+        .subscribeOn(Schedulers.computation())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(onInitObserver);
   }
 
   @Override protected void onStop() {
@@ -107,11 +91,8 @@ public final class SplashActivity extends AppCompatActivity implements OnInitCal
   }
 
   @Override public void onSuccess(SplashLibrary splashLibrary) {
-    // The initialization went successful, we can set the global variable to true.
-    initialized.set(true);
-
     // Open new activity and finish current.
-    openMainAndFinish(this, splashLibrary);
+    openMainAndFinish(splashLibrary);
   }
 
   @Override public void onFailure(Throwable e) {
@@ -120,15 +101,15 @@ public final class SplashActivity extends AppCompatActivity implements OnInitCal
   }
 
   /** Show toast, start new activity and finish current activity. */
-  private static void openMainAndFinish(@NonNull Activity activity, @NonNull SplashLibrary splashLibrary) {
+  private void openMainAndFinish(@NonNull SplashLibrary splashLibrary) {
     final String initialized = splashLibrary.initializedString();
-    Toast.makeText(activity, initialized, Toast.LENGTH_SHORT).show();
+    Toast.makeText(this, initialized, Toast.LENGTH_SHORT).show();
 
-    Intent intent = new Intent(activity, MainActivity.class);
+    Intent intent = new Intent(this, MainActivity.class);
     intent.putExtra(MainActivity.EXTRA_USEFUL_STRING, splashLibrary.usefulString());
-    activity.startActivity(intent);
+    startActivity(intent);
 
-    activity.finish();
+    finish();
   }
 
   // Yes, onInitCallbacks can become null but at that point in time we will have already unsubscribed from this Observer.
