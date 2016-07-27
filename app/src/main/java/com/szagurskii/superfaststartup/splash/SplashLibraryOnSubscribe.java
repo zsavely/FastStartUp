@@ -20,7 +20,8 @@ final class SplashLibraryOnSubscribe implements Observable.OnSubscribe<SplashLib
     try {
       subscriber.onStart();
       SplashLibrary splashLibrary = splashLazy.get();
-      subscriber.onNext(splashLibrary);
+      if (!subscriber.isUnsubscribed())
+        subscriber.onNext(splashLibrary);
       subscriber.onCompleted();
     } catch (Throwable throwable) {
       subscriber.onError(throwable);
