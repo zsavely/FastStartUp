@@ -16,6 +16,7 @@ import rx.functions.Func0;
 @Module
 public class SplashModule {
   public static final String OBSERVABLE_SPLASH_LIBRARY = "observable_splash_library";
+  public static final String OBSERVABLE_SPLASH_LIBRARY_VIA_CREATE = "observable_splash_library_via_create";
   public static final String OBSERVABLE_SPLASH_LIBRARY_FROM_CALLABLE = "observable_splash_library_from_callable";
   public static final String OBSERVABLE_SPLASH_LIBRARY_ASYNC = "observable_splash_library_async";
 
@@ -34,6 +35,12 @@ public class SplashModule {
   }
 
   /** Another possible way to emit initialized {@link SplashLibrary}. */
+  @Provides @NonNull @SplashScope @Named(OBSERVABLE_SPLASH_LIBRARY_VIA_CREATE)
+  public Observable<SplashLibrary> splashLibraryObservableViaCreate(final Lazy<SplashLibrary> splashLazy) {
+    return Observable.create(new SplashLibraryOnSubscribe(splashLazy));
+  }
+
+  /** Another possible way to emit initialized {@link SplashLibrary}. */
   @Provides @NonNull @SplashScope @Named(OBSERVABLE_SPLASH_LIBRARY_FROM_CALLABLE)
   public Observable<SplashLibrary> splashLibraryObservableFromCallable(final Lazy<SplashLibrary> splashLazy) {
     return Observable.fromCallable(new Func0<SplashLibrary>() {
@@ -48,7 +55,12 @@ public class SplashModule {
   public Observable<SplashLibrary> splashLibraryObservableAsync(final Lazy<SplashLibrary> splashLazy) {
     return Observable.fromAsync(new Action1<AsyncEmitter<SplashLibrary>>() {
       @Override public void call(AsyncEmitter<SplashLibrary> emitter) {
-        emitter.onNext(splashLazy.get());
+        try {
+          emitter.onNext(splashLazy.get());
+          emitter.onCompleted();
+        } catch (Throwable throwable) {
+          emitter.onError(throwable);
+        }
       }
     }, AsyncEmitter.BackpressureMode.NONE);
   }
