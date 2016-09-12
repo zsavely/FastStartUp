@@ -35,8 +35,8 @@ dependencies {
   compile 'io.reactivex:rxjava:1.1.10'
   compile 'io.reactivex:rxandroid:1.2.1'
 
-  compile 'com.google.dagger:dagger:2.5'
-  apt 'com.google.dagger:dagger-compiler:2.5'
+  compile 'com.google.dagger:dagger:2.6.1'
+  apt 'com.google.dagger:dagger-compiler:2.6.1'
 
   debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
   releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
