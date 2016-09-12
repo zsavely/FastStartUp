@@ -26,7 +26,7 @@ import rx.schedulers.Schedulers;
 import static com.szagurskii.superfaststartup.splash.SplashModule.OBSERVABLE_SPLASH_LIBRARY;
 
 public final class SplashActivity extends AppCompatActivity implements OnInitCallbacks {
-  private static final String TAG = SplashActivity.class.getSimpleName();
+  static final String TAG = "SplashActivity";
 
   /** Observable which will emit an item when fully initialized. {@link rx.Single} can also be used. */
   @Inject @Named(OBSERVABLE_SPLASH_LIBRARY) Observable<SplashLibrary> splashLibraryObservable;
@@ -133,7 +133,7 @@ public final class SplashActivity extends AppCompatActivity implements OnInitCal
       onInitCallbacks.get().onSuccess(splashLibrary);
     }
 
-    private void releaseListener() {
+    void releaseListener() {
       onInitCallbacks.clear();
     }
   }
